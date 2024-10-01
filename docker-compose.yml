@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  mlflow:
+    image: python:3.8-slim
+    ports:
+      - "8080:5000"
+    volumes:
+      - ./mlflow/mlruns:/mlflow/mlruns  # Directory to store MLflow runs
+      - ./mlflow/artifacts:/mlflow/artifacts  # Directory for artifacts
+    working_dir: /mlflow
+    command: >
+      sh -c "
+      pip install --no-cache-dir mlflow &&
+      mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts --host 0.0.0.0 --port 5000
+      "
